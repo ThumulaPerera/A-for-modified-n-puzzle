@@ -18,11 +18,12 @@ class Node:
         self.parent = parent
         self.move = move
         self.g = g
-        self.calc_h()
+        self.calc_h_misplaced_tiles()
+        # self.calc_h_manhatton_distance()
         self.f = self.g + self.h
         self.get_blank_positions()
 
-    def calc_h(self):
+    def calc_h_misplaced_tiles(self):
         if self.config == goal_config:
             self.h = 0
         else:
@@ -34,6 +35,25 @@ class Node:
                         self.config[i][j] != '-'
                         ):
                         h += 1
+            self.h = h
+    
+    def get_goal_position(self, number):
+        for i in range(side_len):
+            for j in range(side_len):
+                if goal_config[i][j] == number:
+                    return i, j
+
+    def calc_h_manhatton_distance(self):
+        if self.config == goal_config:
+            self.h = 0
+        else:
+            h = 0
+            for i in range(side_len):
+                for j in range(side_len):
+                    if self.config[i][j] == '-':
+                        continue
+                    goal_i, goal_j = self.get_goal_position(self.config[i][j])
+                    h += abs(i - goal_i) + abs(j - goal_j)
             self.h = h
 
     def get_blank_positions(self):
@@ -125,9 +145,11 @@ def print_moves(node):
 
 # start_config_file = input('Enter start configuration file name : ')
 # goal_config_file = input('Enter goal configuration file name : ')
-start_config_file = 'Sample_Start_Configuration.txt'
-goal_config_file = 'Sample_Goal_Configuration.txt'
-output_file = 'Output.txt'
+# start_config_file = 'Sample_Start_Configuration.txt'
+# goal_config_file = 'Sample_Goal_Configuration.txt'
+start_config_file = 'SS.txt'
+goal_config_file = 'SG.txt'
+output_file = 'Output1.txt'
 
 with open(start_config_file) as f:
     reader = csv.reader(f, delimiter="\t")
@@ -140,6 +162,7 @@ with open(goal_config_file) as f:
 side_len = len(start_config)
 
 start_node = Node(start_config, 0)
+print(start_node.h)
 
 open_buffer = [start_node]
 closed_buffer = []
