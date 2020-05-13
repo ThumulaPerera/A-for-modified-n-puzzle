@@ -162,7 +162,7 @@ def arr_to_tuple(arr):
 # goal_config_file = 'Sample_Goal_Configuration.txt'
 start_config_file = 'SS.txt'
 goal_config_file = 'SG.txt'
-output_file = 'Output4.txt'
+output_file = 'Output6.txt'
 
 start_time = time.time()
 
@@ -180,19 +180,16 @@ start_node = Node(start_config, 0)
 print(arr_to_tuple(start_node.config))
 
 open_buffer = {}
+open_buffer_pri_queue = []
 closed_buffer = {}
 
 open_buffer[arr_to_tuple(start_node.config)] = start_node
+heapq.heappush(open_buffer_pri_queue, start_node)
 
+iterations = 0
 while open_buffer:
-    node_n = None
-    for key in open_buffer.keys():
-        if node_n == None:
-            node_n = open_buffer[key]
-        else:
-            if open_buffer[key].f < node_n.f:
-                node_n = open_buffer[key]
-
+    iterations += 1
+    node_n = heapq.heappop(open_buffer_pri_queue)
     del open_buffer[arr_to_tuple(node_n.config)]
     closed_buffer[arr_to_tuple(node_n.config)] = node_n
     if (node_n.config == goal_config):
@@ -205,40 +202,23 @@ while open_buffer:
         successor_key = arr_to_tuple(successor_node.config)
         if(not(successor_key in open_buffer or successor_key in closed_buffer)):
             open_buffer[successor_key] = successor_node
+            heapq.heappush(open_buffer_pri_queue, successor_node)
+   
         if(successor_key in open_buffer):
             if(open_buffer[successor_key].g > successor_node.g):
-                open_buffer[successor_key] = successor_node
+                open_buffer[successor_key].parent = successor_node.parent
+                open_buffer[successor_key].g = successor_node.g
+                open_buffer[successor_key].f = successor_node.f
+                open_buffer[successor_key].move = successor_node.move
+                heapq.heapify(open_buffer_pri_queue)
+
         if(successor_key in closed_buffer):
             if(closed_buffer[successor_key].g > successor_node.g):
                 open_buffer[successor_key] = successor_node
+                heapq.heappush(open_buffer_pri_queue, successor_node)
                 del closed_buffer[successor_key]
 
-
-
-        # in_open_union_close = False
-        # better_node_exists = False
-        # for node_m in open_buffer:
-        #     if node_m.config == successor_node.config:
-        #         in_open_union_close = True
-        #         if node_m.g <= (node_n.g + 1):
-        #             better_node_exists = True
-        #             break
-        # if not better_node_exists:
-        #     heapq.heappush(open_buffer, successor_node)
-        # for node_m in closed_buffer:
-        #     if node_m.config == successor_node.config:
-        #         in_open_union_close = True
-        #         already_appended = False
-        #         if node_m.g > (node_n.g + 1):
-        #             closed_buffer.pop(closed_buffer.index(node_m))
-        #             if not already_appended:
-        #                 heapq.heappush(open_buffer, successor_node)
-        #                 already_appended = True
-        #         break
-        # if not in_open_union_close:
-        #     heapq.heappush(open_buffer, successor_node)
-
-print('terminated')
+print('terminated after ' + str(iterations) + ' iterations')
 print("--- %s seconds ---" % (time.time() - start_time))
 
     
