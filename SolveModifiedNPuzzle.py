@@ -217,37 +217,42 @@ def solve(start_config_file, goal_config_file, output_file, heuristic):
 
     return solved, node_n.f, iterations, time.time() - start_time
 
-### main ###
 
-output_file = 'Output.txt'
+def main():
+    output_file = 'Output.txt'
 
-start_config_file = input('Enter start configuration file name : ')
-goal_config_file = input('Enter goal configuration file name : ')
-heuristic = input('Select the heuristic number \n[0 - no of misplaced tiles] \n[1 - total manhattan distance]\n : ')
+    start_config_file = input('Enter start configuration file name : ')
+    goal_config_file = input('Enter goal configuration file name : ')
+    heuristic = input('Select the heuristic number \n[0 - no of misplaced tiles] \n[1 - total manhattan distance]\n : ')
 
-print('\ncomputing....\n')
- 
-if heuristic != '0':
-    heuristic = '1'
+    print('\ncomputing....\n')
+    
+    if heuristic != '0':
+        heuristic = '1'
 
-start_config = []
-goal_config = []
-side_len = 0
+    start_config = []
+    goal_config = []
+    side_len = 0
 
-solved, no_of_moves, iterations, tot_time = solve(
-    start_config_file,
-    goal_config_file,
-    output_file,
-    heuristic
-)
+    solved, no_of_moves, iterations, tot_time = solve(
+        start_config_file,
+        goal_config_file,
+        output_file,
+        heuristic
+    )
 
-if solved:
-    print('solved in ' + str(no_of_moves) + ' moves')
-    print('output saved in \'' + output_file + '\'')
-else:
-    print('unsolvable') 
-print('terminated after ' + str(iterations) + ' iterations')
-print("--- %s seconds ---" % (tot_time)) 
+    if solved:
+        print('solved in ' + str(no_of_moves) + ' moves')
+        print('output saved in \'' + output_file + '\'')
+    else:
+        print('unsolvable') 
+    print('terminated after ' + str(iterations) + ' iterations')
+    print("--- %s seconds ---" % (tot_time)) 
+
+
+## call the main function when module is run
+if __name__ == "__main__":
+    main()
 
 
 

@@ -43,7 +43,7 @@ for n in range(5, 21):
 
             start_config_file = folder_name + 'RandStart_' + str(n) + '_' + str(j) + '.txt'
             goal_config_file = folder_name + 'RandGoal_' + str(n) + '_' + str(j) + '.txt'
-            output_file = folder_name + 'RandOP_' + str(n) + '_' + str(j) + '_' + str(k) + '.txt'
+            output_file = folder_name + 'OP_' + str(n) + '_' + str(j) + '_' + str(k) + '.txt'
 
             solved, no_of_moves, iterations, tot_time = solve(
                 start_config_file,
