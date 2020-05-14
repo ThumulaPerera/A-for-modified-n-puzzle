@@ -3,6 +3,7 @@ import copy
 import csv
 import time
 import heapq
+import sys
 
 class Coordinate:
     def __init__(self,x,y):
@@ -218,21 +219,24 @@ def solve(start_config_file, goal_config_file, output_file, heuristic):
     return solved, node_n.f, iterations, time.time() - start_time
 
 
-def main():
+def main(argv):
     output_file = 'Output.txt'
 
-    start_config_file = input('Enter start configuration file name : ')
-    goal_config_file = input('Enter goal configuration file name : ')
-    heuristic = input('Select the heuristic number \n[0 - no of misplaced tiles] \n[1 - total manhattan distance]\n : ')
+    if len(argv) < 3:
+        print('The program requires the start config file name and goal config file name as arguements')
+        return
 
-    print('\ncomputing....\n')
-    
-    if heuristic != '0':
+    start_config_file = argv[1]
+    goal_config_file = argv[2]
+    if len(argv) == 4:
+        if argv[3] == '0':
+            heuristic = '0'
+        else:
+            heuristic = '1'
+    else:
         heuristic = '1'
 
-    start_config = []
-    goal_config = []
-    side_len = 0
+    print('\ncomputing....\n')
 
     solved, no_of_moves, iterations, tot_time = solve(
         start_config_file,
@@ -250,9 +254,15 @@ def main():
     print("--- %s seconds ---" % (tot_time)) 
 
 
+
+## global variables
+start_config = []
+goal_config = []
+side_len = 0
+
 ## call the main function when module is run
 if __name__ == "__main__":
-    main()
+    main(sys.argv)
 
 
 
