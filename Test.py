@@ -5,7 +5,8 @@ from SolveModifiedNPuzzle import solve
 
 ### field names in results file ###
 
-result_fields = ['iters_with_nmp',
+result_fields = ['puzzle_size',
+            'iters_with_nmp',
             'iters_with_mhd', 
             'iter_diff', 
             'moves_with_nmp',
@@ -59,6 +60,7 @@ for n in range(5, 21):
             print("--- %s seconds ---" % (tot_time))  
         
         result = {
+            'puzzle_size': n,
             'iters_with_nmp': iterations_tracker[0],
             'iters_with_mhd': iterations_tracker[1], 
             'iter_diff': iterations_tracker[0] - iterations_tracker[1], 
